@@ -18,9 +18,9 @@ public class Main {
             System.out.println("3. Chercher un employee par matricule ");
             System.out.println("4. Ajouter un client ");
             System.out.println("5. Supprimer un Client");
-            System.out.println("6.");
-            System.out.println("7.");
-            System.out.println("8.");
+            System.out.println("6. Chercher un client par code");
+            System.out.println("7.Ajouter un compte courant");
+            System.out.println("8.Ajouter un compte epargne");
             System.out.println("9.");
             System.out.println("10. ");
             System.out.println("11.");
@@ -47,8 +47,10 @@ public class Main {
                     cli.ajouterClient();
                     break;
                 case 5:
+                    cli.supprimerClient();
                     break;
                 case 6:
+                    cli.chercherClient();
                     break;
                 case 7:
                     break;

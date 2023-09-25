@@ -10,8 +10,8 @@ public class CompteEpargne extends Compte{
     private double tauxInteret;
 
 
-    public CompteEpargne(String numero, double solde, LocalDateTime dateCreation, Etat etat, List<Operation> operations, Client client) {
-        super(numero, solde, dateCreation, etat, operations, client);
+    public CompteEpargne(int numero, double solde, LocalDateTime dateCreation, Etat etat, Client client, Employe employe) {
+        super(numero, solde, dateCreation, etat, client, employe);
     }
 
     public int getNum_compte() {

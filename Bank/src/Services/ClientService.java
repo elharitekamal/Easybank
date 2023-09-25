@@ -52,4 +52,45 @@ public class ClientService {
     }
 
 
+    public void supprimerClient(){
+        ClientDaoImpl client = new ClientDaoImpl();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Entrez le code de client que vous souhaitez SUPPRIMER :");
+        int code = scanner.nextInt();
+        int rslt = client.supprimerClient(code);
+        if (rslt != 0){
+            System.out.println("L'employee a été supprimé ");
+        }else{
+            System.out.println("Vueillez valider le code que vous avez entrez");
+            supprimerClient();
+        }
+
+    }
+
+
+
+    public void chercherClient(){
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Entrez le code de l'employé à rechercher : ");
+        int code = scanner.nextInt();
+
+        ClientDaoImpl clt = new ClientDaoImpl();
+        Optional<Client> cltTrouve = clt.chercherClient(code);
+
+        if (cltTrouve.isPresent()) {
+            Client client = cltTrouve.get();
+            System.out.println("Employé trouvé :");
+            System.out.println("Code : " + client.getCode());
+            System.out.println("Nom : " + client.getNom());
+            System.out.println("Prénom : " + client.getPrenom());
+            System.out.println("Date de naissance : " + client.getDateNaissance());
+            System.out.println("Telephone : " + client.getTelephone());
+
+        } else {
+            System.out.println("Aucun client trouvé avec le code " + code);
+        }
+    }
+
+
 }

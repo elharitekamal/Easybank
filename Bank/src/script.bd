@@ -92,3 +92,34 @@ CREATE TABLE affectation(
     FOREIGN KEY (mission) REFERENCES mission(code),
     FOREIGN KEY (employe) REFERENCES employe(matricule)
 );
+
+
+
+
+
+
+
+////////////////////////////////////////////////
+
+
+CREATE OR REPLACE FUNCTION create_compteCourant(
+    p_numero INT,
+    p_solde DOUBLE PRECISION,
+    p_dateCreation DATE,
+    p_etat compte_etat,
+    p_client INT,
+    p_employe INT,
+    p_decouvert DOUBLE PRECISION
+)
+RETURNS VOID AS $$
+BEGIN
+
+    INSERT INTO compte(numero, solde, dateCreation, etat, client, employe)
+    VALUES (p_numero, p_solde, p_dateCreation, p_etat, p_client, p_employe);
+
+    INSERT INTO compteCourant(num_compte, decouvert)
+    VALUES (p_numero, p_decouvert);
+END;
+$$ LANGUAGE plpgsql;
+
+

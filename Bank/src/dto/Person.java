@@ -4,12 +4,12 @@ import java.time.LocalDate;
 
 public class Person {
 
-    private String nom;
-    private String prenom;
-    private String email;
-    private LocalDate dateNaissance;
-    private String telephone;
-    private String adress;
+    protected String nom;
+    protected String prenom;
+    protected String email;
+    protected LocalDate dateNaissance;
+    protected String telephone;
+    protected String adress;
 
     public Person(String nom, String prenom, LocalDate dateNaissance, String telephone, String adress, String email) {
         this.nom = nom;
