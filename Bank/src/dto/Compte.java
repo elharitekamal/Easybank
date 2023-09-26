@@ -1,23 +1,41 @@
 package dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 public class Compte {
 
-    private String numero;
+    private int numero;
     private double solde;
-    private LocalDateTime dateCreation;
+    private LocalDate dateCreation;
     private Etat etat;
     private List<Operation> operations;
     private Client client;
 
-    public String getNumero() {
+    private Employe employe;
+
+    public Compte(int numero, double solde, LocalDateTime dateCreation, Etat etat, int code, int matricule, double decouvert) {
+    }
+
+    public Compte() {
+
+    }
+
+
+    public Employe getEmploye() {
+        return employe;
+    }
+
+    public void setEmploye(Employe employe) {
+        this.employe = employe;
+    }
+
+    public int getNumero() {
         return numero;
     }
 
-    public void setNumero(String numero) {
+    public void setNumero(int numero) {
         this.numero = numero;
     }
 
@@ -29,11 +47,11 @@ public class Compte {
         this.solde = solde;
     }
 
-    public LocalDateTime getDateCreation() {
+    public LocalDate getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(LocalDateTime dateCreation) {
+    public void setDateCreation(LocalDate dateCreation) {
         this.dateCreation = dateCreation;
     }
 
@@ -61,42 +79,23 @@ public class Compte {
         this.client = client;
     }
 
-    public Compte(String numero, double solde, LocalDateTime dateCreation, Etat etat, List<Operation> operations, Client client) {
+    public Compte(int numero, double solde, LocalDate dateCreation, Etat etat,  Client client, Employe employe) {
         this.numero = numero;
         this.solde = solde;
         this.dateCreation = dateCreation;
         this.etat = etat;
-        this.operations = operations;
         this.client = client;
+        this.employe = employe;
     }
 
     @Override
     public String toString() {
         return "Compte{" +
-                "numero='" + numero + '\'' +
-                ", solde=" + solde +
-                ", dateCreation=" + dateCreation +
-                ", etat=" + etat +
-                ", operations=" + operations +
-                ", client=" + client +
+                "etat=" + etat +
                 '}';
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Compte compte = (Compte) o;
-        return Double.compare(solde, compte.solde) == 0 && Objects.equals(numero, compte.numero) && Objects.equals(dateCreation, compte.dateCreation) && etat == compte.etat && Objects.equals(operations, compte.operations) && Objects.equals(client, compte.client);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(numero, solde, dateCreation, etat, operations, client);
-    }
-
-    enum Etat{
+    public enum Etat{
         actif,
         inactif
     }
