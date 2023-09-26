@@ -1,5 +1,6 @@
 package dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -7,16 +8,23 @@ public class Compte {
 
     private int numero;
     private double solde;
-    private LocalDateTime dateCreation;
+    private LocalDate dateCreation;
     private Etat etat;
     private List<Operation> operations;
     private Client client;
 
     private Employe employe;
 
+    public Compte(int numero, double solde, LocalDateTime dateCreation, Etat etat, int code, int matricule, double decouvert) {
+    }
 
-    public int getEmploye() {
-        return employe.getMatricule();
+    public Compte() {
+
+    }
+
+
+    public Employe getEmploye() {
+        return employe;
     }
 
     public void setEmploye(Employe employe) {
@@ -39,11 +47,11 @@ public class Compte {
         this.solde = solde;
     }
 
-    public LocalDateTime getDateCreation() {
+    public LocalDate getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(LocalDateTime dateCreation) {
+    public void setDateCreation(LocalDate dateCreation) {
         this.dateCreation = dateCreation;
     }
 
@@ -63,15 +71,15 @@ public class Compte {
         this.operations = operations;
     }
 
-    public int getClient() {
-        return client.getCode();
+    public Client getClient() {
+        return client;
     }
 
     public void setClient(Client client) {
         this.client = client;
     }
 
-    public Compte(int numero, double solde, LocalDateTime dateCreation, Etat etat,  Client client, Employe employe) {
+    public Compte(int numero, double solde, LocalDate dateCreation, Etat etat,  Client client, Employe employe) {
         this.numero = numero;
         this.solde = solde;
         this.dateCreation = dateCreation;

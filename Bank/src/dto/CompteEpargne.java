@@ -1,5 +1,6 @@
 package dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,7 @@ public class CompteEpargne extends Compte{
     private double tauxInteret;
 
 
-    public CompteEpargne(int numero, double solde, LocalDateTime dateCreation, Etat etat, Client client, Employe employe) {
+    public CompteEpargne(int numero, double solde, LocalDate dateCreation, Etat etat, Client client, Employe employe) {
         super(numero, solde, dateCreation, etat, client, employe);
     }
 

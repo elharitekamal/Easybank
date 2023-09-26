@@ -1,4 +1,5 @@
 import Services.ClientService;
+import Services.CompteCourantService;
 import Services.EmployeService;
 import java.util.Scanner;
 
@@ -9,6 +10,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         EmployeService emp = new EmployeService();
         ClientService cli = new ClientService();
+        CompteCourantService compteC = new CompteCourantService();
 
         while (x) {
 
@@ -53,6 +55,7 @@ public class Main {
                     cli.chercherClient();
                     break;
                 case 7:
+                    compteC.ajouterCompteC();
                     break;
                 case 8:
                     break;

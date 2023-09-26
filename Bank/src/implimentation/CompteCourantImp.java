@@ -4,10 +4,7 @@ import dao.CompteCourantdao;
 import dto.CompteCourant;
 import helper.Connectionbd;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.Optional;
 
 public class CompteCourantImp implements CompteCourantdao {
@@ -15,33 +12,35 @@ public class CompteCourantImp implements CompteCourantdao {
     public Optional<CompteCourant> ajouterCompteC(CompteCourant compteCourant) {
         Connection con = Connectionbd.getConn();
         try {
-            String sql = "CALL create_compteCourant(?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = con.prepareStatement(sql);
+            String compteInsertSQL = "INSERT INTO compte (numero, solde, dateCreation, etat, client, employe) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement stmt = con.prepareStatement(compteInsertSQL);
 
             stmt.setInt(1, compteCourant.getNumero());
             stmt.setDouble(2, compteCourant.getSolde());
-            stmt.setTimestamp(3, Timestamp.valueOf(compteCourant.getDateCreation()));
-            stmt.setString(4, compteCourant.getEtat().name()); // Convert Enum to String
-            stmt.setInt(5, compteCourant.getClient());
-            stmt.setInt(6, compteCourant.getEmploye());
-            stmt.setDouble(7, compteCourant.getDecouvert());
+            stmt.setDate(3, java.sql.Date.valueOf(compteCourant.getDateCreation()));
+            stmt.setObject(4, compteCourant.getEtat().name(), Types.OTHER);
+            stmt.setInt(5, compteCourant.getClient().getCode());
+            stmt.setInt(6, compteCourant.getEmploye().getMatricule());
 
+            stmt.executeUpdate();
 
-            stmt.execute();
+            String compteCourantInsertSQL = "INSERT INTO compteCourant (num_compte, decouvert) " +
+                    "VALUES (?, ?)";
+            stmt = con.prepareStatement(compteCourantInsertSQL);
 
-            int rowsAffected = stmt.executeUpdate();
+            stmt.setInt(1, compteCourant.getNumero());
+            stmt.setDouble(2, compteCourant.getDecouvert());
 
-            if (rowsAffected > 0) {
-                return Optional.of(compteCourant);
-            } else {
-                return Optional.empty();
-            }
+            stmt.executeUpdate();
 
+            return Optional.of(compteCourant);
         } catch (SQLException e) {
             e.printStackTrace();
-            return Optional.of(compteCourant);
+            return Optional.empty();
         }
+
+
     }
-
-
 }
