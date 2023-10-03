@@ -90,6 +90,39 @@ public class CompteCourantService {
         }
 
     }
+
+    public void modifierCompteCourant() {
+        CompteCourantImp comC = new CompteCourantImp();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Entrez le numéro du compte courant à modifier : ");
+        int numeroCompteCourant = scanner.nextInt();
+        CompteCourant compteCourant = comC.chercherCompteC(numeroCompteCourant);
+
+        if (compteCourant != null) {
+            System.out.print("Entrez le nouveau solde : ");
+            double nouveauSolde = scanner.nextDouble();
+
+            System.out.print("Entrez le nouveau découvert : ");
+            double nouveauDecouvert = scanner.nextDouble();
+
+            // Mettez à jour les données du compte courant
+            compteCourant.setSolde(nouveauSolde);
+            compteCourant.setDecouvert(nouveauDecouvert);
+
+            // Appelez la méthode pour modifier le compte courant
+            Optional<CompteCourant> resultat = comC.modifierCompteCourant(compteCourant);
+
+            if (resultat.isPresent()) {
+                System.out.println("Compte courant modifié avec succès !");
+            } else {
+                System.out.println("Échec de la modification du compte courant.");
+            }
+        } else {
+            System.out.println("Compte courant non trouvé.");
+        }
+    }
+
 }
 
 

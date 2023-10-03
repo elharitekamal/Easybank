@@ -1,6 +1,7 @@
 package implimentation;
 
 import dao.Operationdao;
+import dto.Compte;
 import dto.Employe;
 import dto.Operation;
 import helper.Connectionbd;
@@ -8,13 +9,13 @@ import java.sql.*;
 import java.util.Optional;
 
 public class OperationDaoImp implements Operationdao {
-    public Optional<Operation> effectuerRetrait(int numero, double montant, Employe employe) {
+    public Optional<Operation> effectuerRetrait(Compte numero, double montant, Employe employe) {
         Connection con = Connectionbd.getConn();
 
         try {
             String soldeQuery = "SELECT solde FROM compte WHERE numero = ?";
             PreparedStatement soldeStmt = con.prepareStatement(soldeQuery);
-            soldeStmt.setInt(1, numero);
+            soldeStmt.setInt(1, numero.getNumero());
 
             try (ResultSet soldeResultSet = soldeStmt.executeQuery()) {
                 if (!soldeResultSet.next()) {
@@ -24,31 +25,32 @@ public class OperationDaoImp implements Operationdao {
                 double solde = soldeResultSet.getDouble("solde");
                 if (solde < montant) {
                     System.out.print("Le solde est insuffisant ");
-                    return Optional.empty(); // Le solde est insuffisant, retourner un Optional vide
+                    return Optional.empty();
                 }
             }
 
             String retraitQuery = "UPDATE compte SET solde = solde - ? WHERE numero = ?";
             try (PreparedStatement retraitStmt = con.prepareStatement(retraitQuery)) {
                 retraitStmt.setDouble(1, montant);
-                retraitStmt.setInt(2, numero);
+                retraitStmt.setInt(2, numero.getNumero());
                 retraitStmt.executeUpdate();
             }
 
-            String operationQuery = "INSERT INTO operation (datecreation, type, montant, employe) VALUES (?, ?, ?, ?)";
+            String operationQuery = "INSERT INTO operation (datecreation, type, montant, employe, compte1) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement operationStmt = con.prepareStatement(operationQuery, Statement.RETURN_GENERATED_KEYS)) {
 
                 operationStmt.setDate(1, new Date(System.currentTimeMillis())); // Utilisez java.sql.Date.valueOf pour insérer une LocalDate
                 operationStmt.setObject(2, Operation.TYPE.retrait.name(), Types.OTHER);
                 operationStmt.setDouble(3, montant);
                 operationStmt.setInt(4, employe.getMatricule());
+                operationStmt.setInt(5, numero.getNumero());
 
                 int rowsAffected = operationStmt.executeUpdate();
                 if (rowsAffected == 1) {
                     ResultSet generatedKeys = operationStmt.getGeneratedKeys();
                     if (generatedKeys.next()) {
                         int operationId = generatedKeys.getInt(1);
-                        Operation operation = new Operation(new Date(System.currentTimeMillis()), montant, Operation.TYPE.retrait, employe);
+                        Operation operation = new Operation(new Date(System.currentTimeMillis()), montant, Operation.TYPE.retrait, employe, numero, null);
                         return Optional.of(operation);
                     }
                 }
@@ -64,13 +66,13 @@ public class OperationDaoImp implements Operationdao {
 
 
     @Override
-    public Optional<Operation> effectuerVirement(int compteSource, int compteDestinataire, double montant, Employe employe) {
+    public Optional<Operation> effectuerVirement(Compte compteSource, Compte compteDestinataire, double montant, Employe employe) {
         Connection con = Connectionbd.getConn();
 
         try {
             String soldeQuery = "SELECT solde FROM compte WHERE numero = ?";
             PreparedStatement soldeStmt = con.prepareStatement(soldeQuery);
-            soldeStmt.setInt(1, compteSource);
+            soldeStmt.setInt(1, compteSource.getNumero());
             ResultSet soldeResultSet = soldeStmt.executeQuery();
 
             if (!soldeResultSet.next()) {
@@ -88,24 +90,27 @@ public class OperationDaoImp implements Operationdao {
             String miseAJourSourceQuery = "UPDATE compte SET solde = solde - ? WHERE numero = ?";
             PreparedStatement miseAJourSourceStmt = con.prepareStatement(miseAJourSourceQuery);
             miseAJourSourceStmt.setDouble(1, montant);
-            miseAJourSourceStmt.setInt(2, compteSource);
+            miseAJourSourceStmt.setInt(2, compteSource.getNumero());
             miseAJourSourceStmt.executeUpdate();
 
             String miseAJourDestinataireQuery = "UPDATE compte SET solde = solde + ? WHERE numero = ?";
             PreparedStatement miseAJourDestinataireStmt = con.prepareStatement(miseAJourDestinataireQuery);
             miseAJourDestinataireStmt.setDouble(1, montant);
-            miseAJourDestinataireStmt.setInt(2, compteDestinataire);
+            miseAJourDestinataireStmt.setInt(2, compteDestinataire.getNumero());
             miseAJourDestinataireStmt.executeUpdate();
 
-            String transactionQuery = "INSERT INTO operation (datecreation, type, montant, employe) VALUES (?, ?, ?, ?)";
+            String transactionQuery = "INSERT INTO operation (datecreation, type, montant, employe, compte1, compte2) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement transactionStmt = con.prepareStatement(transactionQuery);
             transactionStmt.setDate(1, new java.sql.Date(System.currentTimeMillis()));
             transactionStmt.setObject(2, Operation.TYPE.virement.name(), Types.OTHER);
             transactionStmt.setDouble(3, montant);
             transactionStmt.setInt(4, employe.getMatricule());
+            transactionStmt.setInt(5, compteSource.getNumero());
+            transactionStmt.setInt(6, compteDestinataire.getNumero());
+
             transactionStmt.executeUpdate();
 
-            Operation operation = new Operation(new Date(System.currentTimeMillis()), montant, Operation.TYPE.virement, employe);
+            Operation operation = new Operation(new Date(System.currentTimeMillis()), montant, Operation.TYPE.virement, employe, compteSource, compteDestinataire);
             return Optional.of(operation);
 
         } catch (SQLException e) {
@@ -162,5 +167,4 @@ public class OperationDaoImp implements Operationdao {
             return Optional.empty();
         }
     }
-
 }

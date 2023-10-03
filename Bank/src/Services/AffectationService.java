@@ -10,6 +10,7 @@ import implimentation.EmployeDaoImpl;
 import implimentation.MissionDaoImp;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -72,8 +73,56 @@ public class AffectationService {
             supprimer();
         }
 
-
-
-
     }
+
+
+    public void affectationEmploye(){
+        AffectaionDaoImp aff = new AffectaionDaoImp();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Entrez le matricule de l'employe :");
+        int matricule = scanner.nextInt();
+
+        Optional<List<Affectation>> affectations = aff.affectationEmplye(matricule);
+
+        if(affectations.isPresent()){
+            List<Affectation> toutAffectation = affectations.get();
+            for (Affectation affectation : toutAffectation) {
+                System.out.println("-------------------------");
+                System.out.println("Nom d'employé : " + affectation.getEmploye().getNom());
+                System.out.println("Nom de mission : " + affectation.getMission().getNom());
+                System.out.println("Description de mission : " + affectation.getMission().getDescription());
+                System.out.println("Date de debut : " + affectation.getDateDebut());
+                System.out.println("Date de fin : " + affectation.getDateFin());
+
+            }
+        } else {
+            System.out.println("Aucunne affectation trouvée");
+        }
+        }
+
+
+
+    public void afficherStatistiques() {
+        AffectaionDaoImp aff = new AffectaionDaoImp();
+        int[] statistiques = aff.statistiquesAffectations();
+
+        if (statistiques != null && statistiques.length == 3) {
+            int totalAffectations = statistiques[0];
+            int totalEmployes = statistiques[1];
+            int totalMissions = statistiques[2];
+
+            System.out.println("Statistiques des affectations :");
+            System.out.println("Nombre total d'affectations : " + totalAffectations);
+            System.out.println("Nombre total d'employés distincts : " + totalEmployes);
+            System.out.println("Nombre total de missions distinctes : " + totalMissions);
+        } else {
+            System.out.println("Erreur lors de la récupération des statistiques.");
+        }
+    }
+
+
+
+
+
 }
+

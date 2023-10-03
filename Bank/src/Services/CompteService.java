@@ -1,9 +1,6 @@
 package Services;
 
-import dto.Compte;
-import dto.CompteCourant;
-import dto.CompteEpargne;
-import dto.Employe;
+import dto.*;
 import implimentation.ClientDaoImpl;
 import implimentation.CompteImp;
 import implimentation.EmployeDaoImpl;
@@ -181,5 +178,41 @@ public class CompteService {
             });
         });
     }
+
+    public void chercherCompteparOp() {
+        CompteImp compte = new CompteImp();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Tapez le numéro de l'opération pour chercher le(s) compte(s) : ");
+        int numeroOp = scanner.nextInt();
+
+        int[] numerosComptes = compte.afficherCompteparOp(numeroOp);
+
+        if (numerosComptes[0] != 0) {
+            for (int numeroCompte : numerosComptes) {
+                Optional<Compte> compteOptional = compte.chercherCompteparNum(numeroCompte);
+                if (compteOptional.isPresent()) {
+                    Compte cnt = compteOptional.get();
+                    System.out.println("Numéro de compte : " + cnt.getNumero());
+                    System.out.println("Solde : " + cnt.getSolde());
+                    System.out.println("Date de création : " + cnt.getDateCreation());
+                    System.out.println("Etat : " + cnt.getEtat());
+
+                    if (cnt instanceof CompteCourant) {
+                        CompteCourant compteCourant = (CompteCourant) cnt;
+                        System.out.println("Découvert : " + compteCourant.getDecouvert());
+                    } else if (cnt instanceof CompteEpargne) {
+                        CompteEpargne compteEpargne = (CompteEpargne) cnt;
+                        System.out.println("Taux d'Intérêt : " + compteEpargne.getTauxInteret());
+                    }
+
+                    System.out.println();
+                }
+            }
+        } else {
+            System.out.println("Aucun compte trouvé pour l'opération spécifiée.");
+        }
+    }
+
 
 }

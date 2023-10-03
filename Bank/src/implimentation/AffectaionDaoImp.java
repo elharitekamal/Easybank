@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class AffectaionDaoImp implements AffectationDao {
@@ -55,5 +58,76 @@ public class AffectaionDaoImp implements AffectationDao {
             return 0;
         }
     }
+
+    @Override
+    public Optional<List<Affectation>> affectationEmplye(int matricule) {
+        List<Affectation> affectations = new ArrayList<>();
+        Connection con = Connectionbd.getConn();
+
+        try {
+            String sql = "SELECT * from affectation where employe = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, matricule);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                LocalDate dateDebut = resultSet.getDate("datedebut").toLocalDate();
+                LocalDate dateFin = resultSet.getDate("datefin").toLocalDate();
+                int numMission = resultSet.getInt("mission");
+                EmployeDaoImpl emp = new EmployeDaoImpl();
+                Optional<Employe> employe = emp.chercherEmploye(matricule);
+
+                MissionDaoImp miss = new MissionDaoImp();
+                Optional<Mission> mission = miss.chercherMissionParCode(numMission);
+
+                Affectation affectation = new Affectation(dateDebut, dateFin, mission.get(), employe.get());
+
+                affectations.add(affectation);
+            }
+
+            return Optional.of(affectations);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+
+
+    public int[] statistiquesAffectations() {
+        Connection con = Connectionbd.getConn();
+        int[] statistiques = new int[3];
+
+        try {
+            String nombreAffectationsSql = "SELECT COUNT(*) AS totalAffectations FROM affectation";
+            PreparedStatement nombreAffectationsStmt = con.prepareStatement(nombreAffectationsSql);
+            ResultSet nombreAffectationsResultSet = nombreAffectationsStmt.executeQuery();
+            nombreAffectationsResultSet.next();
+            statistiques[0] = nombreAffectationsResultSet.getInt("totalAffectations");
+
+            String nombreEmployesSql = "SELECT COUNT(DISTINCT employe) AS totalEmployes FROM affectation";
+            PreparedStatement nombreEmployesStmt = con.prepareStatement(nombreEmployesSql);
+            ResultSet nombreEmployesResultSet = nombreEmployesStmt.executeQuery();
+            nombreEmployesResultSet.next();
+            statistiques[1] = nombreEmployesResultSet.getInt("totalEmployes");
+
+            String nombreMissionsSql = "SELECT COUNT(DISTINCT mission) AS totalMissions FROM affectation";
+            PreparedStatement nombreMissionsStmt = con.prepareStatement(nombreMissionsSql);
+            ResultSet nombreMissionsResultSet = nombreMissionsStmt.executeQuery();
+            nombreMissionsResultSet.next();
+            statistiques[2] = nombreMissionsResultSet.getInt("totalMissions");
+
+            return statistiques;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null; // Gestion d'erreur : renvoyer null en cas d'erreur
+        }
+    }
+
+
+
+
+
 
 }

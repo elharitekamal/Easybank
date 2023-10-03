@@ -1,9 +1,9 @@
 package Services;
 
+import dto.Compte;
 import dto.Employe;
 import dto.Operation;
-import implimentation.EmployeDaoImpl;
-import implimentation.OperationDaoImp;
+import implimentation.*;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -12,6 +12,8 @@ public class OperationService {
     public void retrait(){
         Scanner scanner = new Scanner(System.in);
         OperationDaoImp op = new OperationDaoImp();
+        CompteImp findCompte = new CompteImp();
+
 
         System.out.print("Veuillez entrer le numéro d'employe : ");
         int employe = scanner.nextInt();
@@ -20,19 +22,24 @@ public class OperationService {
 
         System.out.print("Veuillez entrer le numéro de compte : ");
         int numero = scanner.nextInt();
+        Optional<Compte> comptef = findCompte.chercherCompteparNum(numero);
+        if(comptef.isPresent()) {
 
 
-        System.out.print("Veuillez entrer le montant du retrait : ");
-        double montant = scanner.nextDouble();
+            System.out.print("Veuillez entrer le montant du retrait : ");
+            double montant = scanner.nextDouble();
 
-        Optional<Operation> retraitReussi = op.effectuerRetrait(numero, montant, employeOptional.get());
+            Optional<Operation> retraitReussi = op.effectuerRetrait(comptef.get(), montant, employeOptional.get());
 
-        if(retraitReussi.isPresent()){
-            System.out.print("Le retrait a été bien éffectué");
+            if (retraitReussi.isPresent()) {
+                System.out.print("Le retrait a été bien éffectué");
 
-        }else{
-            System.out.print("Veuillez ressayer");
+            } else {
+                System.out.print("Veuillez ressayer");
 
+            }
+        }else {
+            System.out.print("Le compte pour le retrait n'existe pas");
         }
 
     }
@@ -40,6 +47,9 @@ public class OperationService {
     public void virement(){
         Scanner scanner = new Scanner(System.in);
         OperationDaoImp op = new OperationDaoImp();
+        CompteImp findCompte = new CompteImp();
+
+
 
         System.out.print("Veuillez entrer le numéro d'employe : ");
         int employe = scanner.nextInt();
@@ -48,21 +58,28 @@ public class OperationService {
 
         System.out.print("Veuillez entrer le numéro de compte source : ");
         int numeroS = scanner.nextInt();
+        Optional<Compte> compteS = findCompte.chercherCompteparNum(numeroS);
 
         System.out.print("Veuillez entrer le numéro de compte destinataire : ");
         int numeroD = scanner.nextInt();
+        Optional<Compte> compteD = findCompte.chercherCompteparNum(numeroD);
 
-        System.out.print("Veuillez entrer le montant de virement : ");
-        int montant = scanner.nextInt();
+        if(compteS.isPresent() && compteD.isPresent()) {
 
-        Optional<Operation> virementReussi = op.effectuerVirement(numeroS, numeroD, montant,  employeOptional.get());
+            System.out.print("Veuillez entrer le montant de virement : ");
+            int montant = scanner.nextInt();
 
-        if(virementReussi.isPresent()){
-            System.out.print("Le virement a été bien éffectué .");
+            Optional<Operation> virementReussi = op.effectuerVirement(compteS.get(), compteD.get(), montant, employeOptional.get());
 
+            if (virementReussi.isPresent()) {
+                System.out.print("Le virement a été bien éffectué .");
+
+            } else {
+                System.out.print("Veuillez ressayer");
+
+            }
         }else{
-            System.out.print("Veuillez ressayer");
-
+            System.out.print("le compte source ou destinataire n'existe pas");
         }
 
     }

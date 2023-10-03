@@ -11,16 +11,31 @@ public class Operation {
     private double montant;
     private TYPE type;
     private Employe employe;
-    private Compte compte;
+    private Compte compte1;
+    private Compte compte2;
 
-    public Operation(Date dateCreation, double montant, TYPE type, Employe employe) {
+
+    public Operation( Date dateCreation, double montant, TYPE type, Employe employe, Compte compte1, Compte compte2) {
         this.dateCreation = dateCreation;
         this.montant = montant;
         this.type = type;
         this.employe = employe;
+        this.compte1 = compte1;
+        this.compte2 = compte2;
     }
 
+    public Operation(int operationId, java.sql.Date dateCreation, double montant, TYPE type, Employe employe) {
+        this.numero = operationId;
+        this.dateCreation = dateCreation;
+        this.montant = montant;
+        this.type=type;
+        this.employe=employe;
 
+
+
+
+
+    }
 
     public int getNumero() {
         return numero;
@@ -62,20 +77,20 @@ public class Operation {
         this.employe = employe;
     }
 
-    public Compte getCompte() {
-        return compte;
+    public Compte getCompte1() {
+        return compte1;
     }
 
-    public void setCompte(Compte compte) {
-        this.compte = compte;
+    public void setCompte1(Compte compte1) {
+        this.compte1 = compte1;
     }
 
-    public Operation(int numero, Date dateCreation, double montant, TYPE type, Employe employe) {
-        this.numero = numero;
-        this.dateCreation = dateCreation;
-        this.montant = montant;
-        this.type = type;
-        this.employe = employe;
+    public Compte getCompte2() {
+        return compte2;
+    }
+
+    public void setCompte2(Compte compte2) {
+        this.compte2 = compte2;
     }
 
     public enum TYPE{

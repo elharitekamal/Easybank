@@ -9,6 +9,7 @@ public interface CompteCourantdao {
     Optional<CompteCourant> ajouterCompteC(CompteCourant compteCourant);
     int supprimerCompte(int numero);
 
-    boolean chercherCompteC(int numero);
+    Optional<CompteCourant> modifierCompteCourant(CompteCourant compteCourantModifie);
+    CompteCourant chercherCompteC(int numero);
 
 }
