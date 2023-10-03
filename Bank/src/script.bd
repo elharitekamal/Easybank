@@ -59,13 +59,13 @@ CREATE TABLE compte (
 CREATE TABLE compteCourant(
       num_compte INT NOT NULL,
       decouvert DOUBLE PRECISION NOT NULL,
-      FOREIGN KEY (num_compte) REFERENCES compte(numero)
+      FOREIGN KEY (num_compte) REFERENCES compte(numero) ON DELETE CASCADE
 );
 
 CREATE TABLE compteEpargne(
       num_compte INT NOT NULL,
       tauxInteret DOUBLE PRECISION NOT NULL,
-      FOREIGN KEY (num_compte) REFERENCES compte(numero)
+      FOREIGN KEY (num_compte) REFERENCES compte(numero) ON DELETE CASCADE
 );
 
 

@@ -1,7 +1,6 @@
 package dto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class Compte {
@@ -12,15 +11,21 @@ public class Compte {
     private Etat etat;
     private List<Operation> operations;
     private Client client;
-
     private Employe employe;
 
-    public Compte(int numero, double solde, LocalDateTime dateCreation, Etat etat, int code, int matricule, double decouvert) {
-    }
+
+
+
+
+
+
+
 
     public Compte() {
 
     }
+
+
 
 
     public Employe getEmploye() {
@@ -88,12 +93,7 @@ public class Compte {
         this.employe = employe;
     }
 
-    @Override
-    public String toString() {
-        return "Compte{" +
-                "etat=" + etat +
-                '}';
-    }
+
 
     public enum Etat{
         actif,

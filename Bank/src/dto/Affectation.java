@@ -1,35 +1,35 @@
 package dto;
 
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Affectation {
 
-    private LocalDateTime dateDebut ;
-    private LocalDateTime dateFin ;
+    private LocalDate dateDebut ;
+    private LocalDate dateFin ;
     private Mission mission;
     private Employe employe;
 
-    public Affectation(LocalDateTime dateDebut, LocalDateTime dateFin, Mission mission, Employe employe) {
+    public Affectation(LocalDate dateDebut, LocalDate dateFin, Mission mission, Employe employe) {
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.mission = mission;
         this.employe = employe;
     }
 
-    public LocalDateTime getDateDebut() {
+    public LocalDate getDateDebut() {
         return dateDebut;
     }
 
-    public void setDateDebut(LocalDateTime dateDebut) {
+    public void setDateDebut(LocalDate dateDebut) {
         this.dateDebut = dateDebut;
     }
 
-    public LocalDateTime getDateFin() {
+    public LocalDate getDateFin() {
         return dateFin;
     }
 
-    public void setDateFin(LocalDateTime dateFin) {
+    public void setDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
     }
 

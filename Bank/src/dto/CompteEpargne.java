@@ -11,8 +11,19 @@ public class CompteEpargne extends Compte{
     private double tauxInteret;
 
 
-    public CompteEpargne(int numero, double solde, LocalDate dateCreation, Etat etat, Client client, Employe employe) {
+
+
+    public CompteEpargne(int numero, double solde, LocalDate dateCreation, Etat etat, Client client, Employe employe, int num_compte, double decouvert) {
         super(numero, solde, dateCreation, etat, client, employe);
+        this.num_compte = num_compte;
+        this.tauxInteret = decouvert;
+    }
+
+    public CompteEpargne(Compte compte, double tauxInteret) {
+    }
+
+    public CompteEpargne() {
+
     }
 
     public int getNum_compte() {

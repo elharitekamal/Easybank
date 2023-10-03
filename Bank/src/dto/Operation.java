@@ -1,38 +1,40 @@
 package dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Operation {
 
-    private String numero;
-    private LocalDateTime dateCreation;
+    private int numero;
+    private Date dateCreation;
     private double montant;
     private TYPE type;
     private Employe employe;
     private Compte compte;
 
-    public Operation(String numero, LocalDateTime dateCreation, double montant, TYPE type, Employe employe, Compte compte) {
-        this.numero = numero;
+    public Operation(Date dateCreation, double montant, TYPE type, Employe employe) {
         this.dateCreation = dateCreation;
         this.montant = montant;
         this.type = type;
         this.employe = employe;
-        this.compte = compte;
     }
 
-    public String getNumero() {
+
+
+    public int getNumero() {
         return numero;
     }
 
-    public void setNumero(String numero) {
+    public void setNumero(int numero) {
         this.numero = numero;
     }
 
-    public LocalDateTime getDateCreation() {
+    public Date getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(LocalDateTime dateCreation) {
+    public void setDateCreation(Date dateCreation) {
         this.dateCreation = dateCreation;
     }
 
@@ -68,8 +70,16 @@ public class Operation {
         this.compte = compte;
     }
 
-    enum TYPE{
-        virememt,
+    public Operation(int numero, Date dateCreation, double montant, TYPE type, Employe employe) {
+        this.numero = numero;
+        this.dateCreation = dateCreation;
+        this.montant = montant;
+        this.type = type;
+        this.employe = employe;
+    }
+
+    public enum TYPE{
+        virement,
         retrait
     }
 }

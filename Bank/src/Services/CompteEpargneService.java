@@ -1,27 +1,23 @@
 package Services;
 
-import dto.Client;
-import dto.Compte;
-import dto.CompteCourant;
-import dto.Employe;
+import dto.*;
 import implimentation.ClientDaoImpl;
-import implimentation.CompteCourantImp;
+import implimentation.CompteEpargneImp;
 import implimentation.EmployeDaoImpl;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.Scanner;
 
+public class CompteEpargneService {
 
-public class CompteCourantService {
-    public CompteCourant ajouterCompteC() {
+    public CompteEpargne ajouterCompteE() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter Numero: ");
         int numero = scanner.nextInt();
+
 
         System.out.print("Enter Solde: ");
         double solde = scanner.nextDouble();
@@ -39,7 +35,7 @@ public class CompteCourantService {
         Optional<Client> clientOptional = cl.chercherClient(clientC);
 
         if (!clientOptional.isPresent()) {
-            System.out.println("Client not found.");
+            System.out.println("Client n'existe pas.");
             return null;
         }
         Client client = clientOptional.get();
@@ -50,18 +46,18 @@ public class CompteCourantService {
         Optional<Employe> employeOptional = emp.chercherEmploye(employeM);
 
         if (!employeOptional.isPresent()) {
-            System.out.println("Employe not found.");
+            System.out.println("Emlpoyé n'existe pas");
             return null;
         }
         Employe employe = employeOptional.get();
 
         System.out.print("Enter Decouvert: ");
-        double decouvert = scanner.nextDouble();
+        double tautInteret = scanner.nextDouble();
 
         try {
-            CompteCourant comC = new CompteCourant(numero, solde, dateCreation, etat, client, employe, numero, decouvert);
-            CompteCourantImp compteCourantImp = new CompteCourantImp();
-            Optional<CompteCourant> resultat = compteCourantImp.ajouterCompteC(comC);
+            CompteEpargne comE = new CompteEpargne(numero, solde, dateCreation, etat, client, employe, numero, tautInteret);
+            CompteEpargneImp compteEparneImp = new CompteEpargneImp();
+            Optional<CompteEpargne> resultat = compteEparneImp.ajouterCompteE(comE);
 
             if (resultat.isPresent()) {
                 System.out.println("Compte ajouté avec succès ! Numéro de compte : " + resultat.get().getNumero());
@@ -76,22 +72,43 @@ public class CompteCourantService {
     }
 
 
-    public void supprimerCompte(){
-        CompteCourantImp cnt = new CompteCourantImp();
+
+    public void modifierCompteEpargne() {
+        CompteEpargneImp comE = new CompteEpargneImp();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Entrez le numero de compte que vous souhaitez SUPPRIMER :");
-        int numero = scanner.nextInt();
-        int rslt = cnt.supprimerCompte(numero);
-        if (rslt != 0){
-            System.out.println("Le compte a été supprimé ");
-        }else{
-            System.out.println("Vueillez valider le numero que vous avez entrez");
-            supprimerCompte();
+
+        System.out.print("Entrez le numéro du compte épargne à modifier : ");
+        int numeroCompteEpargne = scanner.nextInt();
+        CompteEpargne compteEpargne = comE.chercherCompteEpargneParNumero(numeroCompteEpargne);
+        if (compteEpargne != null) {
+            System.out.print("Entrez le nouveau solde : ");
+            double nouveauSolde = scanner.nextDouble();
+
+            System.out.print("Entrez le nouveau taux d'intérêt : ");
+            double nouveauTauxInteret = scanner.nextDouble();
+
+            CompteEpargne compteEpargneModifie = new CompteEpargne();
+
+            compteEpargneModifie.setSolde(nouveauSolde);
+            compteEpargneModifie.setTauxInteret(nouveauTauxInteret);
+            compteEpargneModifie.setNum_compte(numeroCompteEpargne);
+
+
+            Optional<CompteEpargne> resultat = comE.modifierCompteEpargne(compteEpargneModifie);
+
+            if (resultat.isPresent()) {
+                System.out.println("Compte épargne modifié avec succès !");
+            } else {
+                System.out.println("Échec de la modification du compte épargne.");
+            }
+        } else {
+            System.out.println("Compte épargne non trouvé.");
         }
-
     }
+
+
+
+
+
+
 }
-
-
-
-

@@ -13,6 +13,8 @@ public class CompteCourant extends Compte{
         this.decouvert = decouvert;
     }
 
+    public CompteCourant(Compte compte, double decouvert) {
+    }
 
 
     public int getNum_compte() {

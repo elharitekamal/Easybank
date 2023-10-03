@@ -5,11 +5,13 @@ public class Mission {
     private int code;
     private String nom;
     private String description;
+    private Employe employe;
 
-    public Mission(int code, String nom, String description) {
+    public Mission(int code, String nom, String description, Employe employe) {
         this.code = code;
         this.nom = nom;
         this.description = description;
+        this.employe = employe;
     }
 
     public int getCode() {
@@ -35,4 +37,13 @@ public class Mission {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Employe getEmploye() {
+        return employe;
+    }
+
+    public void setEmploye(Employe employe) {
+        this.employe = employe;
+    }
+
 }
